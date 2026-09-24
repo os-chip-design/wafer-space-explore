@@ -169,14 +169,14 @@ KLAYOUT_DRC_THREADS: 1
 KLAYOUT_DRC_OPTIONS:
   decks: "all,-antenna,-density,-cup" # disable CUP for now
   variant: ref::$PDK
-  workers: max
+  workers: 1
 
 KLAYOUT_DENSITY_OPTIONS:
   decks: "density"
   variant: ref::$PDK
-  workers: max
+  workers: 1
 
 KLAYOUT_ANTENNA_OPTIONS:
   decks: "antenna"
   variant: ref::$PDK
-  workers: max
+  workers: 1
