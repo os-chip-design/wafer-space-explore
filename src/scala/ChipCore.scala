@@ -3,6 +3,8 @@ import chisel3.experimental.Analog
 import chisel3.util.{Cat, Fill}
 import scopt.OParser
 
+import gf180mcu._
+
 import scala.collection.immutable.ListMap
 
 /**
