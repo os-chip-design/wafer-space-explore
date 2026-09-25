@@ -56,6 +56,9 @@
               gnugrep
               gawk
 
+              # Chisel
+              sbt
+
               # Simulation
               iverilog
               verilator

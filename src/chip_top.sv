@@ -232,18 +232,9 @@ module chip_top #(
 
     // Core design
 
-    chip_core #(
-        .NUM_INPUT_PADS  (NUM_INPUT_PADS),
-        .NUM_BIDIR_PADS  (NUM_BIDIR_PADS),
-        .NUM_ANALOG_PADS (NUM_ANALOG_PADS)
-    ) i_chip_core (
-        `ifdef USE_POWER_PINS
-        .VDD        (VDD),
-        .VSS        (VSS),
-        `endif
-    
-        .clk        (clk_PAD2CORE),
-        .rst_n      (rst_n_PAD2CORE),
+    ChipCore i_chip_core (    
+        .clock        (clk_PAD2CORE),
+        .reset      (!rst_n_PAD2CORE),
     
         .input_in   (input_PAD2CORE),
         .input_pu   (input_CORE2PAD_PU),

@@ -115,7 +115,8 @@ def chip_top_runner():
         defines.update({"FUNCTIONAL": True, "USE_POWER_PINS": True})
     else:
         sources.append(proj_path / "../src/chip_top.sv")
-        sources.append(proj_path / "../src/chip_core.sv")
+        # Generated from the Chisel sources by make chisel
+        sources.append(proj_path / "../generated/ChipCore.v")
 
     sources += [
         # IO pad models

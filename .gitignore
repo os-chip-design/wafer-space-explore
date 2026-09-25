@@ -7,3 +7,11 @@ final/
 img/
 *.lyrdb
 generated_defines.svh
+target/
+project/project/
+.bsp/
+generated/
+.metals/
+.bloop/
+metals.sbt
+.vscode/

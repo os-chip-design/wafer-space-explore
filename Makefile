@@ -44,7 +44,7 @@ else
 endif
 
 AVAILABLE_SLOTS = 1x1 0p5x1 1x0p5 0p5x0p5
-DEFAULT_SLOT = 1x1
+DEFAULT_SLOT = 0p5x0p5
 
 # Slot can be any of AVAILABLE_SLOTS
 SLOT ?= $(DEFAULT_SLOT)
@@ -90,23 +90,27 @@ defines:
 	$(file >>src/generated_defines.svh,`define ${SRAM_DEFINE})
 .PHONY: defines
 
-librelane: clone-pdk defines ## Run LibreLane flow (synthesis, PnR, verification)
+chisel: ## Generate generated/ChipCore.v from the Chisel sources
+	sbt --batch "runMain ChipCore --slot $(SLOT)"
+.PHONY: chisel
+
+librelane: clone-pdk defines chisel ## Run LibreLane flow (synthesis, PnR, verification)
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final
 .PHONY: librelane
 
-librelane-condensed: clone-pdk defines ## Run LibreLane flow (synthesis, PnR, verification)
+librelane-condensed: clone-pdk defines chisel ## Run LibreLane flow (synthesis, PnR, verification)
 	SRAM_DEFINE=${SRAM_DEFINE} librelane --condensed ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final
 .PHONY: librelane-condensed
 
-librelane-nodrc: clone-pdk defines ## Run LibreLane flow without DRC checks
+librelane-nodrc: clone-pdk defines chisel ## Run LibreLane flow without DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip KLayout.Antenna --skip KLayout.DRC --skip Magic.DRC
 .PHONY: librelane-nodrc
 
-librelane-klayoutdrc: clone-pdk defines ## Run LibreLane flow without magic DRC checks
+librelane-klayoutdrc: clone-pdk defines chisel ## Run LibreLane flow without magic DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip Magic.DRC
 .PHONY: librelane-klayoutdrc
 
-librelane-magicdrc: clone-pdk defines ## Run LibreLane flow without KLayout DRC checks
+librelane-magicdrc: clone-pdk defines chisel ## Run LibreLane flow without KLayout DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip KLayout.DRC
 .PHONY: librelane-magicdrc
 
@@ -122,7 +126,7 @@ librelane-padring: clone-pdk defines ## Only create the padring
 	python3 scripts/padring.py ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS}
 .PHONY: librelane-padring
 
-sim: clone-pdk defines ## Run RTL simulation with cocotb
+sim: clone-pdk defines chisel ## Run RTL simulation with cocotb
 	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} SLOT=${SLOT} PAD=${PAD} SCL=${SCL} SRAM=${SRAM} python3 chip_top_tb.py
 .PHONY: sim
 

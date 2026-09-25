@@ -1,0 +1,3 @@
+[submodule "wildcat"]
+	path = wildcat
+	url = https://github.com/schoeberl/wildcat.git
